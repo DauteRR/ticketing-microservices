@@ -4,7 +4,7 @@ export class UnknownError extends CustomError {
   statusCode = 500;
 
   constructor() {
-    super();
+    super('Unknown error');
     Object.setPrototypeOf(this, UnknownError.prototype);
   }
 

@@ -10,8 +10,8 @@ export interface CommonErrorStructure {
 export abstract class CustomError extends Error {
   public abstract statusCode: number;
 
-  constructor() {
-    super();
+  constructor(message: string) {
+    super(message);
     Object.setPrototypeOf(this, CustomError.prototype);
   }
 

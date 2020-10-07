@@ -9,6 +9,7 @@ export function errorHandler(
   next: NextFunction
 ) {
   if (err instanceof CustomError) {
+    console.error(err);
     res.status(err.statusCode).send(err.serializeError());
   } else {
     console.error('[Unknown error]', err);

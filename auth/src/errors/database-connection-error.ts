@@ -1,6 +1,6 @@
-import { BaseError, CommonErrorStructure } from './base-error';
+import { CustomError, CommonErrorStructure } from './custom-error';
 
-export class DatabaseConnectionError extends BaseError {
+export class DatabaseConnectionError extends CustomError {
   statusCode = 500;
 
   constructor() {

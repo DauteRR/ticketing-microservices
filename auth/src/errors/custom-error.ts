@@ -7,12 +7,12 @@ export interface CommonErrorStructure {
   errors: ErrorInfo[];
 }
 
-export abstract class BaseError extends Error {
+export abstract class CustomError extends Error {
   public abstract statusCode: number;
 
   constructor() {
     super();
-    Object.setPrototypeOf(this, BaseError.prototype);
+    Object.setPrototypeOf(this, CustomError.prototype);
   }
 
   abstract serializeError(): CommonErrorStructure;

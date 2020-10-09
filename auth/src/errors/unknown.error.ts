@@ -1,4 +1,4 @@
-import { CustomError, CommonErrorStructure } from './custom-error';
+import { CustomError, CommonErrorStructure } from './custom.error';
 
 export class UnknownError extends CustomError {
   statusCode = 500;

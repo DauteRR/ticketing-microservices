@@ -3,12 +3,12 @@ import 'express-async-errors';
 import { json } from 'body-parser';
 import mongoose from 'mongoose';
 
-import { currentUserRouter } from './routes/current-user';
-import { signinRouter } from './routes/signin';
-import { signoutRouter } from './routes/signout';
-import { signupRouter } from './routes/signup';
-import { errorHandler } from './middlewares/error-handler';
-import { NotFoundError } from './errors/not-found-error';
+import { currentUserRouter } from './routes/current-user.route';
+import { signinRouter } from './routes/signin.route';
+import { signoutRouter } from './routes/signout.route';
+import { signupRouter } from './routes/signup.route';
+import { errorHandler } from './middlewares/error-handler.middleware';
+import { NotFoundError } from './errors/not-found.error';
 
 const app = express();
 app.use(json());

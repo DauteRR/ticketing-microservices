@@ -1,4 +1,5 @@
-import { Model, Schema, model, Document } from 'mongoose';
+import { Document, Model, model, Schema } from 'mongoose';
+import { PasswordUtils } from '../utils/password.utils';
 
 // Propertiees that are required to create a new User
 interface UserAttrs {
@@ -24,6 +25,15 @@ const userSchema = new Schema({
     required: true
   }
 });
+
+userSchema.pre('save', async function (done) {
+  if (this.isModified('password')) {
+    const hashed = await PasswordUtils.toHash(this.get('password'));
+    this.set('password', hashed);
+  }
+  done();
+});
+
 userSchema.statics.build = (attrs: UserAttrs) => new User(attrs);
 
 export const User = model<UserDocument, UserModel>('User', userSchema);

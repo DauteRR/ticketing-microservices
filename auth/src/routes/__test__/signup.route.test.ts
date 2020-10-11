@@ -29,9 +29,9 @@ describe('/api/users/signup', () => {
       .send({ email: 'test@test.com', password: '1' })
       .expect(400);
 
-    expect(body).toHaveProperty('errors');
+    expect(body.errors).toBeDefined();
     expect(body.errors).toHaveLength(1);
-    expect(body.errors[0]).toHaveProperty('field');
+    expect(body.errors[0].field).toBeDefined();
     expect(body.errors[0].field).toEqual('password');
   });
 

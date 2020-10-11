@@ -16,3 +16,13 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: dauterr/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'pages/**/*.tsx'
+            dest: .
+          - src: 'src/**/*.tsx'
+            dest: .

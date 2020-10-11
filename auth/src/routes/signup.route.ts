@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
+import jwt from 'jsonwebtoken';
 import { SignUpDto } from '../dtos/signup.dto';
 import { BadRequestError } from '../errors/bad-request.error';
 import { RequestValidationError } from '../errors/request-validation.error';
@@ -37,7 +38,13 @@ router.post(
 
     await user.save();
 
-    // TODO return a cookie or jwt
+    const userJwt = jwt.sign(
+      { email: user.email, id: user._id },
+      process.env.JWT_KEY!
+    );
+
+    req.session = { jwt: userJwt };
+
     res.status(201).send({ email: user.email, id: user._id });
   }
 );

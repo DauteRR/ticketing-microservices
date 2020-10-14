@@ -2,19 +2,19 @@ import axios from 'axios';
 import { useState } from 'react';
 import { ApiError } from '..';
 
-interface UseRequestParams<R> {
+interface UseRequestParams<Body, Response> {
   url: string;
   method: 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS' | 'PATCH';
-  body: object;
-  onSuccess(data: R): any;
+  body: Body;
+  onSuccess(data: Response): any;
 }
 
-export function useRequest<R extends any>({
+export function useRequest<Body = any, Response = any>({
   body,
   method,
   url,
   onSuccess
-}: UseRequestParams<R>) {
+}: UseRequestParams<Body, Response>) {
   const [errors, setErrors] = useState<JSX.Element>(<></>);
 
   const doRequest = async () => {
@@ -28,7 +28,7 @@ export function useRequest<R extends any>({
 
       if (onSuccess) onSuccess(response.data);
 
-      return response.data as R;
+      return response.data as Response;
     } catch (err) {
       setErrors(
         <div className="alert alert-danger">

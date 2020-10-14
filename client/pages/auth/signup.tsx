@@ -2,11 +2,21 @@ import React, { useState } from 'react';
 import Router from 'next/router';
 import { useRequest } from '../../hooks/useRequest';
 
+interface SignUpRequestBody {
+  email: string;
+  password: string;
+}
+
+interface SignUpResponse {
+  email: string;
+  id: string;
+}
+
 export const SignUp: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  const [doRequest, errors] = useRequest({
+  const [doRequest, errors] = useRequest<SignUpRequestBody, SignUpResponse>({
     body: { email, password },
     method: 'POST',
     url: '/api/users/signup',

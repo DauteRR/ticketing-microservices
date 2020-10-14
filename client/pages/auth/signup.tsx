@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Router from 'next/router';
 import { useRequest } from '../../hooks/useRequest';
 
 export const SignUp: React.FC = () => {
@@ -8,11 +9,13 @@ export const SignUp: React.FC = () => {
   const [doRequest, errors] = useRequest({
     body: { email, password },
     method: 'POST',
-    url: '/api/users/signup'
+    url: '/api/users/signup',
+    onSuccess: () => Router.push('/')
   });
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     doRequest();
   };
 

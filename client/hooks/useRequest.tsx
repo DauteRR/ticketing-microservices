@@ -2,17 +2,19 @@ import axios from 'axios';
 import { useState } from 'react';
 import { ApiError } from '..';
 
-interface UseRequestParams {
+interface UseRequestParams<R> {
   url: string;
   method: 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS' | 'PATCH';
   body: object;
+  onSuccess(data: R): any;
 }
 
 export function useRequest<R extends any>({
   body,
   method,
-  url
-}: UseRequestParams) {
+  url,
+  onSuccess
+}: UseRequestParams<R>) {
   const [errors, setErrors] = useState<JSX.Element>(<></>);
 
   const doRequest = async () => {
@@ -23,6 +25,9 @@ export function useRequest<R extends any>({
         method,
         data: body
       });
+
+      if (onSuccess) onSuccess(response.data);
+
       return response.data as R;
     } catch (err) {
       setErrors(

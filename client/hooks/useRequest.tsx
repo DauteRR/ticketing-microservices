@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { ApiError } from '..';
+import { ErrorsAlert } from '../components/ErrorsAlert';
 
 interface UseRequestParams<Body, Response> {
   url: string;
@@ -30,15 +31,24 @@ export function useRequest<Body = any, Response = any>({
 
       return response.data as Response;
     } catch (err) {
+      const {
+        response: {
+          data: { errors }
+        }
+      } = err;
+
       setErrors(
-        <div className="alert alert-danger">
-          <h4>Ooops...</h4>
-          <ul className="my-0">
+        errors ? (
+          <ErrorsAlert>
             {(err.response.data.errors as ApiError[]).map((error, index) => (
               <li key={index}>{error.message}</li>
             ))}
-          </ul>
-        </div>
+          </ErrorsAlert>
+        ) : (
+          <ErrorsAlert>
+            <li>Something went wrong :(</li>
+          </ErrorsAlert>
+        )
       );
     }
   };

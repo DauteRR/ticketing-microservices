@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import { NextPage } from 'next';
 import Router from 'next/router';
+import React, { useState } from 'react';
 import { useRequest } from '../../hooks/useRequest';
 
 interface SignUpRequestBody {
@@ -12,7 +13,7 @@ interface SignUpResponse {
   id: string;
 }
 
-export const SignUp: React.FC = () => {
+export const SignUp: NextPage = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 

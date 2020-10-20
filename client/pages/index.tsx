@@ -2,16 +2,6 @@ import axios from 'axios';
 import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
 
-interface CurrentUser {
-  email: string;
-  id: string;
-  iat: number;
-}
-
-interface CurrentUserResponse {
-  currentUser: CurrentUser | null;
-}
-
 interface Props extends CurrentUserResponse {}
 
 export const getServerSideProps: GetServerSideProps<Props> = async ({

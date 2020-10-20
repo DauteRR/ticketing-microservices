@@ -3,16 +3,6 @@ import Router from 'next/router';
 import React, { useState } from 'react';
 import { useRequest } from '../../hooks/useRequest';
 
-interface SignInRequestBody {
-  email: string;
-  password: string;
-}
-
-interface SignInResponse {
-  email: string;
-  id: string;
-}
-
 export const SignIn: NextPage = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');

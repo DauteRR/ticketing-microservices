@@ -1,7 +1,6 @@
-import axios, { AxiosResponse } from 'axios';
-import { NextPage } from 'next';
+import axios from 'axios';
+import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
-import { GetServerSideProps } from 'next';
 
 interface CurrentUser {
   email: string;

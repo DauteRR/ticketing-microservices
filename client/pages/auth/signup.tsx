@@ -2,6 +2,7 @@ import { NextPage } from 'next';
 import Router from 'next/router';
 import React, { useState } from 'react';
 import { AuthForm } from '../../components/AuthForm';
+import { withAuthServerSideProps } from '../../hocs/withAuthServerSideProps';
 import { useRequest } from '../../hooks/useRequest';
 
 export const SignUp: NextPage = () => {
@@ -33,5 +34,7 @@ export const SignUp: NextPage = () => {
     />
   );
 };
+
+export const getServerSideProps = withAuthServerSideProps();
 
 export default SignUp;

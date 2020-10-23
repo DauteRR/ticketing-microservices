@@ -2,10 +2,13 @@ import { NextPage } from 'next';
 import Router from 'next/router';
 import React, { useState } from 'react';
 import { AuthForm } from '../../components/AuthForm';
+import { Header } from '../../components/Header';
 import { withAuthServerSideProps } from '../../hocs/withAuthServerSideProps';
 import { useRequest } from '../../hooks/useRequest';
 
-export const SignUp: NextPage = () => {
+interface Props extends CurrentUserResponse {}
+
+export const SignUp: NextPage<Props> = ({ currentUser }) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
@@ -23,15 +26,18 @@ export const SignUp: NextPage = () => {
   };
 
   return (
-    <AuthForm
-      onSubmit={onSubmit}
-      email={email}
-      password={password}
-      setEmail={setEmail}
-      setPassword={setPassword}
-      errors={errors}
-      type="Sign Up"
-    />
+    <>
+      <Header currentUser={currentUser} />
+      <AuthForm
+        onSubmit={onSubmit}
+        email={email}
+        password={password}
+        setEmail={setEmail}
+        setPassword={setPassword}
+        errors={errors}
+        type="Sign Up"
+      />
+    </>
   );
 };
 

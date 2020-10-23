@@ -1,5 +1,5 @@
 import express from 'express';
-import { currentUser } from '../middlewares/current-user.middleware';
+import { currentUser } from '@drrtickets/common';
 
 const router = express.Router();
 

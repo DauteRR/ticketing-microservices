@@ -1,8 +1,7 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { SignInDto } from '../dtos/signin.dto';
-import { BadRequestError } from '../errors/bad-request.error';
-import { requestValidator } from '../middlewares/request-validator.middleware';
+import { BadRequestError, requestValidator } from '@drrtickets/common';
 import { User } from '../models/user.model';
 import { PasswordUtils } from '../utils/password.utils';
 import jwt from 'jsonwebtoken';

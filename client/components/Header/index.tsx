@@ -28,7 +28,7 @@ export const Header: React.FC<Props> = ({ currentUser }) => {
           )}
           {currentUser && (
             <li className="nav-item">
-              <Link href="/">
+              <Link href="/auth/signout">
                 <a className="nav-link">Sign Out</a>
               </Link>
             </li>

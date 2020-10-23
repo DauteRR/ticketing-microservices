@@ -26,3 +26,7 @@ interface SignUpResponse {
   email: string;
   id: string;
 }
+
+interface SignOutRequestBody {}
+
+interface SignOutResponse {}

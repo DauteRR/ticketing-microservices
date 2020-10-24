@@ -26,3 +26,11 @@ build:
             dest: .
           - src: 'src/**/*.tsx'
             dest: .
+    - image: dauterr/tickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .

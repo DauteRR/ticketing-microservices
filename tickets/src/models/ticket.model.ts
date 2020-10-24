@@ -1,4 +1,5 @@
 import { Document, Model, model, Schema } from 'mongoose';
+import { CreateTicketDto } from '../dtos/tickets.dto';
 
 interface TicketAttrs extends CreateTicketDto {
   userId: string;

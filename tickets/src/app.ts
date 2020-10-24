@@ -1,8 +1,9 @@
+import { currentUser, errorHandler, NotFoundError } from '@drrtickets/common';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 import express, { Request } from 'express';
 import 'express-async-errors';
-import { NotFoundError, errorHandler } from '@drrtickets/common';
+import { ticketsRouter } from './routes/tickets.route';
 
 const app = express();
 app.set('trust proxy', true);
@@ -13,6 +14,9 @@ app.use(
     secure: process.env.NODE_ENV !== 'test'
   })
 );
+app.use(currentUser);
+
+app.use(ticketsRouter);
 
 app.all('*', async (req: Request) => {
   throw new NotFoundError(req.method, req.path);

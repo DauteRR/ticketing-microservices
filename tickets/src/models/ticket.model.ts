@@ -9,7 +9,7 @@ interface TicketModel extends Model<TicketDocument> {
   build(attrs: TicketAttrs): TicketDocument;
 }
 
-interface TicketDocument extends Document, TicketAttrs {}
+export interface TicketDocument extends Document, TicketAttrs {}
 
 const ticketSchema = new Schema(
   {

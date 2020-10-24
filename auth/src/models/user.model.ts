@@ -1,7 +1,7 @@
 import { Document, Model, model, Schema } from 'mongoose';
 import { PasswordUtils } from '../utils/password.utils';
 
-// Propertiees that are required to create a new User
+// Properties that are required to create a new User
 interface UserAttrs {
   email: string;
   password: string;

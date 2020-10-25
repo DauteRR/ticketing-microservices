@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 declare global {
   namespace NodeJS {
     interface Global {
-      getAuthCookie(email: string, password: string): string[];
+      getAuthCookie(email: string): string[];
     }
   }
 }
@@ -33,9 +33,9 @@ afterAll(async () => {
   await mongoose.connection.close();
 });
 
-global.getAuthCookie = (email: string, password: string) => {
+global.getAuthCookie = (email: string) => {
   const payload = {
-    id: 'id',
+    id: email,
     email
   };
   const token = jwt.sign(payload, process.env.JWT_KEY!);

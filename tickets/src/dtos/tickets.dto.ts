@@ -8,3 +8,7 @@ export interface CreateTicketDto {
 export interface CreateTicketResponse extends TicketDocument {}
 
 export type GetTicketsResponse = TicketDocument[];
+
+export interface UpdateTicketDto extends Partial<CreateTicketDto> {}
+
+export type UpdateTicketResponse = CreateTicketResponse;

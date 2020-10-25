@@ -1,14 +1,17 @@
 import {
   NotFoundError,
   requestValidator,
-  requireAuth
+  requireAuth,
+  UnauthorizedError
 } from '@drrtickets/common';
 import express, { Request, Response } from 'express';
 import { body, param } from 'express-validator';
 import {
   CreateTicketDto,
   CreateTicketResponse,
-  GetTicketsResponse
+  GetTicketsResponse,
+  UpdateTicketDto,
+  UpdateTicketResponse
 } from '../dtos/tickets.dto';
 import { Ticket } from '../models/ticket.model';
 
@@ -68,6 +71,42 @@ router.get(
   async (req: Request, res: Response<GetTicketsResponse>) => {
     const tickets = await Ticket.find();
     res.send(tickets);
+  }
+);
+
+router.put(
+  '/api/tickets/:id',
+  requireAuth,
+  [
+    param('id')
+      .isMongoId()
+      .withMessage('Wrong format, a MongoDB id was expected'),
+    body('title').not().isEmpty().withMessage('Title is required').optional(),
+    body('price')
+      .isFloat({ gt: 0 })
+      .withMessage('Price should be greatest than zero')
+      .optional()
+  ],
+  requestValidator,
+  async (
+    req: Request<{ id: string }, {}, UpdateTicketDto>,
+    res: Response<UpdateTicketResponse>
+  ) => {
+    const { id } = req.params;
+    let ticket = await Ticket.findById(id);
+
+    if (!ticket) {
+      throw new NotFoundError('PUT', `/api/tickets/${id}`);
+    }
+
+    if (ticket.userId !== req.currentUser!.id) {
+      throw new UnauthorizedError();
+    }
+
+    ticket.set(req.body);
+    await ticket.save();
+
+    res.send(ticket);
   }
 );
 

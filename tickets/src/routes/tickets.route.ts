@@ -5,7 +5,11 @@ import {
 } from '@drrtickets/common';
 import express, { Request, Response } from 'express';
 import { body, param } from 'express-validator';
-import { CreateTicketDto, CreateTicketResponse } from '../dtos/tickets.dto';
+import {
+  CreateTicketDto,
+  CreateTicketResponse,
+  GetTicketsResponse
+} from '../dtos/tickets.dto';
 import { Ticket } from '../models/ticket.model';
 
 const router = express.Router();
@@ -56,6 +60,14 @@ router.get(
     }
 
     res.send(ticket);
+  }
+);
+
+router.get(
+  '/api/tickets',
+  async (req: Request, res: Response<GetTicketsResponse>) => {
+    const tickets = await Ticket.find();
+    res.send(tickets);
   }
 );
 

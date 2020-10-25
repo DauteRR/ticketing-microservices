@@ -6,3 +6,5 @@ export interface CreateTicketDto {
 }
 
 export interface CreateTicketResponse extends TicketDocument {}
+
+export type GetTicketsResponse = TicketDocument[];

@@ -2,65 +2,35 @@ import request from 'supertest';
 import { app } from '../../app';
 import { Ticket } from '../../models/ticket.model';
 
+const createTicket = (title?: string, price?: number, auth: boolean = true) =>
+  request(app)
+    .post('/api/tickets')
+    .set('Cookie', auth ? global.getAuthCookie('test@test.com', 'pass') : [])
+    .send({ title, price });
+
 describe('POST /api/tickets', () => {
-  const endpoint = '/api/tickets';
-
   it('has a route handler listening to /api/tickets [POST]', async () => {
-    const response = await request(app).post(endpoint).send({});
-
+    const response = await createTicket('title', 10);
     expect(response.status).not.toEqual(404);
   });
 
   it('can only be accessed if the user is signed in', async () => {
-    await request(app).post(endpoint).send({}).expect(401);
+    await createTicket('title', 10, false).expect(401);
   });
 
   it('returns a status other than 401 if the user is signed in', async () => {
-    const authCookie = global.getAuthCookie('test@test.com', 'pass');
-    const response = await request(app)
-      .post(endpoint)
-      .set('Cookie', authCookie)
-      .send({});
-
+    const response = await createTicket('title', 10);
     expect(response.status).not.toEqual(401);
   });
 
   it('returns an error if an invalid title is provided', async () => {
-    const authCookie = global.getAuthCookie('test@test.com', 'pass');
-    await request(app)
-      .post(endpoint)
-      .set('Cookie', authCookie)
-      .send({
-        title: '',
-        price: 10
-      })
-      .expect(400);
-    await request(app)
-      .post(endpoint)
-      .set('Cookie', authCookie)
-      .send({
-        price: 10
-      })
-      .expect(400);
+    await createTicket('', 10).expect(400);
+    await createTicket(undefined, 10).expect(400);
   });
 
   it('returns an error if an invalid price is provided', async () => {
-    const authCookie = global.getAuthCookie('test@test.com', 'pass');
-    await request(app)
-      .post(endpoint)
-      .set('Cookie', authCookie)
-      .send({
-        title: 'Title',
-        price: -10
-      })
-      .expect(400);
-    await request(app)
-      .post(endpoint)
-      .set('Cookie', authCookie)
-      .send({
-        title: 'Title'
-      })
-      .expect(400);
+    await createTicket('title', -10).expect(400);
+    await createTicket('title').expect(400);
   });
 
   it('creates a ticket with valid inputs', async () => {
@@ -72,11 +42,7 @@ describe('POST /api/tickets', () => {
     expect(tickets.length).toEqual(0);
 
     const authCookie = global.getAuthCookie('test@test.com', 'pass');
-    await request(app)
-      .post(endpoint)
-      .set('Cookie', authCookie)
-      .send(newTicket)
-      .expect(201);
+    await createTicket(newTicket.title, newTicket.price).expect(201);
 
     tickets = await Ticket.find({});
     expect(tickets.length).toEqual(1);
@@ -105,12 +71,10 @@ describe('GET /api/tickets/:id', () => {
       price: 22
     };
 
-    const authCookie = global.getAuthCookie('test@test.com', 'pass');
-    const response = await request(app)
-      .post(baseEndpoint)
-      .set('Cookie', authCookie)
-      .send(newTicket)
-      .expect(201);
+    const response = await createTicket(
+      newTicket.title,
+      newTicket.price
+    ).expect(201);
 
     const { body } = await request(app)
       .get(`${baseEndpoint}/${response.body.id}`)
@@ -118,5 +82,29 @@ describe('GET /api/tickets/:id', () => {
       .expect(200);
     expect(body.title).toEqual(newTicket.title);
     expect(body.price).toEqual(newTicket.price);
+  });
+});
+
+describe('GET /api/tickets', () => {
+  const endpoint = '/api/tickets';
+
+  it('has a route handler listening to /api/tickets [GET]', async () => {
+    const response = await request(app).get(endpoint).send({});
+    expect(response.status).not.toEqual(404);
+  });
+
+  it('can fetch a list of tickets', async () => {
+    const response = await request(app).get(endpoint).send({});
+    expect(response.body.length).toEqual(0);
+
+    await Promise.all([
+      createTicket('title 1', 1).expect(201),
+      createTicket('title 2', 2).expect(201),
+      createTicket('title 3', 3).expect(201),
+      createTicket('title 4', 4).expect(201)
+    ]);
+
+    const { body } = await request(app).get(endpoint).send({});
+    expect(body.length).toEqual(4);
   });
 });

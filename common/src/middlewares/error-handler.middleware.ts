@@ -9,9 +9,10 @@ export function errorHandler(
   next: NextFunction
 ) {
   if (err instanceof CustomError) {
-    res.status(err.statusCode).send(err.serializeError());
-  } else {
-    const { statusCode, serializeError } = new UnknownError();
-    res.status(statusCode).send(serializeError());
+    return res.status(err.statusCode).send(err.serializeError());
   }
+
+  console.error(err);
+  const { statusCode, serializeError } = new UnknownError();
+  res.status(statusCode).send(serializeError());
 }

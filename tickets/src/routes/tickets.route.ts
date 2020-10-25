@@ -1,6 +1,10 @@
-import { requestValidator, requireAuth } from '@drrtickets/common';
+import {
+  NotFoundError,
+  requestValidator,
+  requireAuth
+} from '@drrtickets/common';
 import express, { Request, Response } from 'express';
-import { body } from 'express-validator';
+import { body, param } from 'express-validator';
 import { CreateTicketDto, CreateTicketResponse } from '../dtos/tickets.dto';
 import { Ticket } from '../models/ticket.model';
 
@@ -31,6 +35,27 @@ router.post(
     const ticketDocument = await ticket.save();
 
     res.status(201).send(ticketDocument);
+  }
+);
+
+router.get(
+  '/api/tickets/:id',
+  [
+    param('id')
+      .isMongoId()
+      .withMessage('Wrong format, a MongoDB id was expected')
+  ],
+  requestValidator,
+  async (req: Request<{ id: string }>, res: Response<CreateTicketResponse>) => {
+    const { id } = req.params;
+
+    const ticket = await Ticket.findById(id);
+
+    if (!ticket) {
+      throw new NotFoundError('GET', `/api/tickets/${id}`);
+    }
+
+    res.send(ticket);
   }
 );
 

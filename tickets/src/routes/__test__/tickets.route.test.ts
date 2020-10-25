@@ -84,3 +84,39 @@ describe('POST /api/tickets', () => {
     expect(tickets[0].price).toEqual(newTicket.price);
   });
 });
+
+describe('GET /api/tickets/:id', () => {
+  const baseEndpoint = '/api/tickets';
+
+  it('returns a 404 if the ticket is not found', async () => {
+    await request(app)
+      .get(`${baseEndpoint}/5f95a1471a431118c6b4fd0f`)
+      .send()
+      .expect(404);
+  });
+
+  it('returns an error if the given id is not a mongo id', async () => {
+    await request(app).get(`${baseEndpoint}/invalid_id`).send().expect(400);
+  });
+
+  it('returns the ticket if the ticket is found', async () => {
+    const newTicket = {
+      title: 'Title',
+      price: 22
+    };
+
+    const authCookie = global.getAuthCookie('test@test.com', 'pass');
+    const response = await request(app)
+      .post(baseEndpoint)
+      .set('Cookie', authCookie)
+      .send(newTicket)
+      .expect(201);
+
+    const { body } = await request(app)
+      .get(`${baseEndpoint}/${response.body.id}`)
+      .send()
+      .expect(200);
+    expect(body.title).toEqual(newTicket.title);
+    expect(body.price).toEqual(newTicket.price);
+  });
+});

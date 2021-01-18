@@ -1,4 +1,3 @@
-// Re-export stuff from errors and middlewares
 export * from './errors/bad-request.error';
 export * from './errors/custom.error';
 export * from './errors/database-connection.error';
@@ -11,3 +10,11 @@ export * from './middlewares/current-user.middleware';
 export * from './middlewares/error-handler.middleware';
 export * from './middlewares/request-validator.middleware';
 export * from './middlewares/require-auth.middleware';
+
+export * from './nats/listener';
+export * from './nats/publisher';
+
+export * from './events/base.event';
+export * from './events/subject';
+export * from './events/ticket-created.event';
+export * from './events/ticket-updated.event';

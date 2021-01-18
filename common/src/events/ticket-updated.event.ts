@@ -1,4 +1,5 @@
-import { Subject, BaseEvent } from './';
+import { BaseEvent } from './base.event';
+import { Subject } from './subject';
 
 export interface TicketUpdatedEventData {
   id: string;

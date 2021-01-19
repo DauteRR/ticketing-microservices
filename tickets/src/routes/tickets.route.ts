@@ -14,6 +14,8 @@ import {
   UpdateTicketResponse
 } from '../dtos/tickets.dto';
 import { Ticket } from '../models/ticket.model';
+import { natsWrapper } from '../nats-wrapper';
+import { TicketCreatedPublisher } from '../publishers/ticket-created.publisher';
 
 const router = express.Router();
 
@@ -40,6 +42,13 @@ router.post(
     });
 
     const ticketDocument = await ticket.save();
+
+    const publisher = new TicketCreatedPublisher(natsWrapper.client);
+
+    publisher.publish({
+      id: ticketDocument.id,
+      ...ticketDocument
+    });
 
     res.status(201).send(ticketDocument);
   }

@@ -16,6 +16,7 @@ import {
 import { Ticket } from '../models/ticket.model';
 import { natsWrapper } from '../nats-wrapper';
 import { TicketCreatedPublisher } from '../publishers/ticket-created.publisher';
+import { TicketUpdatedPublisher } from '../publishers/ticket-updated.publisher';
 
 const router = express.Router();
 
@@ -114,6 +115,13 @@ router.put(
 
     ticket.set(req.body);
     await ticket.save();
+
+    const publisher = new TicketUpdatedPublisher(natsWrapper.client);
+
+    publisher.publish({
+      id: ticket.id,
+      ...ticket
+    });
 
     res.send(ticket);
   }

@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
 import { Ticket } from '../../models/ticket.model';
+import { natsWrapper } from '../../nats-wrapper';
 
 const createTicket = (
   title?: string,
@@ -59,6 +60,19 @@ describe('POST /api/tickets', () => {
     expect(tickets.length).toEqual(1);
     expect(tickets[0].title).toEqual(newTicket.title);
     expect(tickets[0].price).toEqual(newTicket.price);
+  });
+
+  it('publishes an event', async () => {
+    const newTicket = {
+      title: 'Title',
+      price: 22
+    };
+    let tickets = await Ticket.find({});
+    expect(tickets.length).toEqual(0);
+
+    await createTicket(newTicket.title, newTicket.price).expect(201);
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
   });
 });
 
@@ -232,5 +246,22 @@ describe('PUT /api/tickets/:id', () => {
     const { body } = await getTicket(id);
     expect(body.title).toEqual(title);
     expect(body.price).toEqual(price);
+  });
+
+  it('publishes an event', async () => {
+    let title = 'title';
+    let price = 20;
+    const {
+      body: { id }
+    } = await createTicket(title, price, 'test1@test.com').expect(201);
+    title = 'new title';
+    price = 1000;
+    await request(app)
+      .put(`${baseEndpoint}/${id}`)
+      .set('Cookie', global.getAuthCookie('test1@test.com'))
+      .send({ title, price })
+      .expect(200);
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
   });
 });

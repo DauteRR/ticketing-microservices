@@ -3,7 +3,10 @@ import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 import express, { Request } from 'express';
 import 'express-async-errors';
-import { ticketsRouter } from './routes/tickets.route';
+import { createTicketRouter } from './routes/create-ticket.route';
+import { getTicketRouter } from './routes/get-ticket.route';
+import { getTicketsRouter } from './routes/get-tickets.route';
+import { updateTicketRouter } from './routes/update-ticket.route';
 
 const app = express();
 app.set('trust proxy', true);
@@ -16,7 +19,10 @@ app.use(
 );
 app.use(currentUser);
 
-app.use(ticketsRouter);
+app.use(createTicketRouter);
+app.use(getTicketRouter);
+app.use(getTicketsRouter);
+app.use(updateTicketRouter);
 
 app.all('*', async (req: Request) => {
   throw new NotFoundError(req.method, req.path);

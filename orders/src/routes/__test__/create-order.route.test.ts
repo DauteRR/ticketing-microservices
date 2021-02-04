@@ -28,6 +28,7 @@ describe('Orders creation: POST /api/orders', () => {
       expiresAt: new Date(),
       status: OrderStatus.Created
     });
+    await order.save();
 
     await request(app)
       .post('/api/orders')
@@ -36,5 +37,17 @@ describe('Orders creation: POST /api/orders', () => {
       .expect(400);
   });
 
-  it.todo('reserves a ticket');
+  it('reserves a ticket', async () => {
+    const ticket = Ticket.build({
+      price: 100,
+      title: 'concert'
+    });
+    await ticket.save();
+
+    await request(app)
+      .post('/api/orders')
+      .set('Cookie', global.getAuthCookie('test@test.com'))
+      .send({ ticketId: ticket.id })
+      .expect(201);
+  });
 });

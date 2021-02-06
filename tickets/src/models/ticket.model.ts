@@ -1,17 +1,17 @@
-import { Document, Model, model, Schema } from 'mongoose';
+import { Model, Document, Schema, model } from 'mongoose';
 import { CreateTicketDto } from '../dtos/tickets.dto';
 
 interface TicketAttrs extends CreateTicketDto {
   userId: string;
 }
 
+export interface TicketDocument extends Document, TicketAttrs {}
+
 interface TicketModel extends Model<TicketDocument> {
   build(attrs: TicketAttrs): TicketDocument;
 }
 
-export interface TicketDocument extends Document, TicketAttrs {}
-
-const ticketSchema = new Schema(
+const ticketSchema = new Schema<TicketDocument, TicketModel>(
   {
     title: {
       type: String,

@@ -11,7 +11,7 @@ interface OrderAttrs {
   ticket: TicketDocument;
 }
 
-interface OrderDocument extends Document, OrderAttrs {}
+export interface OrderDocument extends Document, OrderAttrs {}
 
 interface OrderModel extends Model<OrderDocument> {
   build(attrs: OrderAttrs): OrderDocument;

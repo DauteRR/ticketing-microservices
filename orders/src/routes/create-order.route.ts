@@ -8,7 +8,7 @@ import {
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { CreateOrderDto } from '../dtos/orders.dto';
-import { Order } from '../models/order.model';
+import { Order, OrderDocument } from '../models/order.model';
 import { Ticket } from '../models/ticket.model';
 
 export const createOrderRouter = express.Router();
@@ -24,7 +24,10 @@ createOrderRouter.post(
       .withMessage('Wrong format, a MongoDB id was expected')
   ],
   requestValidator,
-  async (req: Request<{}, {}, CreateOrderDto>, res: Response<{}>) => {
+  async (
+    req: Request<{}, {}, CreateOrderDto>,
+    res: Response<OrderDocument>
+  ) => {
     const { ticketId } = req.body;
 
     const ticket = await Ticket.findById(ticketId);

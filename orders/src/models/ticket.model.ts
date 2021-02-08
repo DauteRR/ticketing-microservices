@@ -3,7 +3,7 @@ import { Order, OrderStatus } from './order.model';
 
 interface TicketAttrs {
   title: string;
-  price: Number;
+  price: number;
 }
 
 export interface TicketDocument extends Document, TicketAttrs {

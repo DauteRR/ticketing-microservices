@@ -15,7 +15,7 @@ interface UserModel extends Model<UserDocument> {
 // Properties that a User Document has
 interface UserDocument extends Document, UserAttrs {}
 
-const userSchema = new Schema(
+const userSchema = new Schema<UserDocument, UserModel>(
   {
     email: {
       type: String,

@@ -7,11 +7,16 @@ interface TicketAttrs {
 }
 
 export interface TicketDocument extends Document, TicketAttrs {
+  version: number;
   isReserved(): Promise<boolean>;
 }
 
 interface TicketModel extends Model<TicketDocument> {
   build(id: string, attrs: TicketAttrs): TicketDocument;
+  findByEvent(event: {
+    id: string;
+    version: number;
+  }): Promise<TicketDocument | null>;
 }
 
 const ticketSchema = new Schema<TicketDocument, TicketModel>(
@@ -27,6 +32,8 @@ const ticketSchema = new Schema<TicketDocument, TicketModel>(
     }
   },
   {
+    versionKey: 'version',
+    optimisticConcurrency: true,
     toJSON: {
       transform(doc, ret) {
         ret.id = ret._id;
@@ -41,6 +48,19 @@ ticketSchema.statics.build = (id: string, { title, price }: TicketAttrs) => {
     _id: id,
     title,
     price
+  });
+};
+
+ticketSchema.statics.findByEvent = ({
+  id,
+  version
+}: {
+  id: string;
+  version: number;
+}) => {
+  return Ticket.findOne({
+    _id: id,
+    version: version - 1
   });
 };
 

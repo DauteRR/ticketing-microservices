@@ -2,7 +2,8 @@ import {
   requireAuth,
   requestValidator,
   NotFoundError,
-  UnauthorizedError
+  UnauthorizedError,
+  BadRequestError
 } from '@drrtickets/common';
 import express, { Request, Response } from 'express';
 import { param, body } from 'express-validator';
@@ -42,17 +43,26 @@ updateTicketRouter.put(
       throw new UnauthorizedError();
     }
 
+    const { price, title } = req.body;
+
+    const samePrice = price === undefined || price === ticket.price;
+    const sameTitle = title === undefined || title === ticket.title;
+
+    if (samePrice && sameTitle) {
+      return res.send(ticket);
+    }
+
     ticket.set(req.body);
     await ticket.save();
 
     const publisher = new TicketUpdatedPublisher(natsWrapper.client);
 
-    const { price, title, userId, version } = ticket;
+    const { userId, version } = ticket;
 
     publisher.publish({
       id,
-      price,
-      title,
+      price: ticket.price,
+      title: ticket.title,
       userId,
       version
     });

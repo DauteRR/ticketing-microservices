@@ -11,7 +11,9 @@ interface OrderAttrs {
   ticket: TicketDocument;
 }
 
-export interface OrderDocument extends Document, OrderAttrs {}
+export interface OrderDocument extends Document, OrderAttrs {
+  version: number;
+}
 
 interface OrderModel extends Model<OrderDocument> {
   build(attrs: OrderAttrs): OrderDocument;
@@ -38,6 +40,8 @@ const orderSchema = new Schema<OrderDocument, OrderModel>(
     }
   },
   {
+    versionKey: 'version',
+    optimisticConcurrency: true,
     toJSON: {
       transform: (doc, ret) => {
         ret.id = ret._id;

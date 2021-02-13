@@ -36,7 +36,9 @@ createTicketRouter.post(
 
     publisher.publish({
       id: ticketDocument.id,
-      ...ticketDocument
+      price,
+      title,
+      userId: req.currentUser!.id
     });
 
     res.status(201).send(ticketDocument);

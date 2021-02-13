@@ -38,7 +38,8 @@ createTicketRouter.post(
       id: ticketDocument.id,
       price,
       title,
-      userId: req.currentUser!.id
+      userId: req.currentUser!.id,
+      version: ticket.version
     });
 
     res.status(201).send(ticketDocument);

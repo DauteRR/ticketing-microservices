@@ -47,9 +47,14 @@ updateTicketRouter.put(
 
     const publisher = new TicketUpdatedPublisher(natsWrapper.client);
 
+    const { price, title, userId, version } = ticket;
+
     publisher.publish({
-      id: ticket.id,
-      ...ticket
+      id,
+      price,
+      title,
+      userId,
+      version
     });
 
     res.send(ticket);

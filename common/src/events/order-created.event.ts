@@ -4,6 +4,7 @@ import { Subject } from './subject';
 
 export interface OrderCreatedEventData {
   id: string;
+  version: number;
   status: OrderStatus;
   userId: string;
   expiresAt: string;

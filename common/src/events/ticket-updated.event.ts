@@ -6,6 +6,7 @@ export interface TicketUpdatedEventData {
   title: string;
   price: number;
   userId: string;
+  version: number;
 }
 
 export interface TicketUpdatedEvent extends BaseEvent {

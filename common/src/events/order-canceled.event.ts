@@ -3,6 +3,7 @@ import { Subject } from './subject';
 
 export interface OrderCanceledEventData {
   id: string;
+  version: number;
   ticket: {
     id: string;
   };

@@ -5,7 +5,9 @@ interface TicketAttrs extends CreateTicketDto {
   userId: string;
 }
 
-export interface TicketDocument extends Document, TicketAttrs {}
+export interface TicketDocument extends Document, TicketAttrs {
+  version: number;
+}
 
 interface TicketModel extends Model<TicketDocument> {
   build(attrs: TicketAttrs): TicketDocument;
@@ -27,6 +29,8 @@ const ticketSchema = new Schema<TicketDocument, TicketModel>(
     }
   },
   {
+    optimisticConcurrency: true,
+    versionKey: 'version',
     toJSON: {
       transform: (document: TicketDocument, ret: Partial<TicketDocument>) => {
         ret.id = ret._id;

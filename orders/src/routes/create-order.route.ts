@@ -7,6 +7,7 @@ import {
 } from '@drrtickets/common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
+import { EXPIRATION_WINDOWS_SECONDS } from '../constants';
 import { CreateOrderDto } from '../dtos/orders.dto';
 import { Order, OrderDocument } from '../models/order.model';
 import { Ticket } from '../models/ticket.model';
@@ -14,8 +15,6 @@ import { natsWrapper } from '../nats-wrapper';
 import { OrderCreatedPublisher } from '../publishers/order-created.publisher';
 
 export const createOrderRouter = express.Router();
-
-const EXPIRATION_WINDOWS_SECONDS = 15 * 60;
 
 createOrderRouter.post(
   '/api/orders',

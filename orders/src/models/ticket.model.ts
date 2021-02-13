@@ -11,7 +11,7 @@ export interface TicketDocument extends Document, TicketAttrs {
 }
 
 interface TicketModel extends Model<TicketDocument> {
-  build(attrs: TicketAttrs): TicketDocument;
+  build(id: string, attrs: TicketAttrs): TicketDocument;
 }
 
 const ticketSchema = new Schema<TicketDocument, TicketModel>(
@@ -36,8 +36,12 @@ const ticketSchema = new Schema<TicketDocument, TicketModel>(
   }
 );
 
-ticketSchema.statics.build = (attrs: TicketAttrs) => {
-  return new Ticket(attrs);
+ticketSchema.statics.build = (id: string, { title, price }: TicketAttrs) => {
+  return new Ticket({
+    _id: id,
+    title,
+    price
+  });
 };
 
 ticketSchema.methods.isReserved = async function () {

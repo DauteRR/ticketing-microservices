@@ -1,4 +1,5 @@
 import { OrderStatus, Subject } from '@drrtickets/common';
+import { mongo } from 'mongoose';
 import request from 'supertest';
 import { app } from '../../app';
 import { Order } from '../../models/order.model';
@@ -7,7 +8,7 @@ import { natsWrapper } from '../../nats-wrapper';
 
 describe('Order cancellation: Delete /api/orders/:id', () => {
   it('marks an order as cancelled', async () => {
-    const ticket = Ticket.build({
+    const ticket = Ticket.build(new mongo.ObjectId().toHexString(), {
       title: 'concert',
       price: 100
     });
@@ -32,7 +33,7 @@ describe('Order cancellation: Delete /api/orders/:id', () => {
   });
 
   it('emits an order canceled event', async () => {
-    const ticket = Ticket.build({
+    const ticket = Ticket.build(new mongo.ObjectId().toHexString(), {
       title: 'concert',
       price: 100
     });

@@ -1,10 +1,11 @@
+import { mongo } from 'mongoose';
 import request from 'supertest';
 import { app } from '../../app';
 import { Ticket } from '../../models/ticket.model';
 
 describe('Specific order retrieval: GET /api/orders/:id', () => {
   it('fetches the order', async () => {
-    const ticket = Ticket.build({
+    const ticket = Ticket.build(new mongo.ObjectId().toHexString(), {
       price: 100,
       title: 'concert'
     });
@@ -28,7 +29,7 @@ describe('Specific order retrieval: GET /api/orders/:id', () => {
   });
 
   it('returns an error if one user tries to fetch another users order', async () => {
-    const ticket = Ticket.build({
+    const ticket = Ticket.build(new mongo.ObjectId().toHexString(), {
       price: 100,
       title: 'concert'
     });

@@ -2,14 +2,13 @@ import request from 'supertest';
 import { app } from '../../app';
 import { Order, OrderStatus } from '../../models/order.model';
 import { Ticket } from '../../models/ticket.model';
-import mongoose from 'mongoose';
+import { mongo } from 'mongoose';
 import { natsWrapper } from '../../nats-wrapper';
 import { Subject } from '@drrtickets/common';
 
 describe('Orders creation: POST /api/orders', () => {
   it('returns an error if the ticket does not exist', async () => {
-    const ticketId = mongoose.Types.ObjectId();
-
+    const ticketId = new mongo.ObjectId().toHexString();
     await request(app)
       .post('/api/orders')
       .set('Cookie', global.getAuthCookie('test@test.com'))
@@ -18,7 +17,7 @@ describe('Orders creation: POST /api/orders', () => {
   });
 
   it('returns an error if the ticket is already reserved', async () => {
-    const ticket = Ticket.build({
+    const ticket = Ticket.build(new mongo.ObjectId().toHexString(), {
       price: 100,
       title: 'concert'
     });
@@ -40,7 +39,7 @@ describe('Orders creation: POST /api/orders', () => {
   });
 
   it('reserves a ticket', async () => {
-    const ticket = Ticket.build({
+    const ticket = Ticket.build(new mongo.ObjectId().toHexString(), {
       price: 100,
       title: 'concert'
     });
@@ -54,7 +53,7 @@ describe('Orders creation: POST /api/orders', () => {
   });
 
   it('emits an order created event', async () => {
-    const ticket = Ticket.build({
+    const ticket = Ticket.build(new mongo.ObjectId().toHexString(), {
       price: 100,
       title: 'concert'
     });

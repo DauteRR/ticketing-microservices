@@ -51,4 +51,20 @@ describe('TicketUpdated listener', () => {
 
     expect(message.ack).toHaveBeenCalled();
   });
+
+  it('does not call ack if the event has a skipped version number', async () => {
+    const consoleError = console.error;
+    global.console.error = jest.fn();
+    const [listener, eventData, message, ticket] = await setup();
+
+    eventData.version = 10;
+    try {
+      await listener.onMessage(eventData, message);
+    } catch (err) {}
+
+    expect(global.console.error).toHaveBeenCalled();
+    expect(message.ack).not.toHaveBeenCalled();
+
+    global.console.error = consoleError;
+  });
 });

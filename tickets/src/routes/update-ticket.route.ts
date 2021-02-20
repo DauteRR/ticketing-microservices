@@ -43,6 +43,10 @@ updateTicketRouter.put(
       throw new UnauthorizedError();
     }
 
+    if (ticket.orderId) {
+      throw new BadRequestError('Cannot edit a reserved ticket');
+    }
+
     const { price, title } = req.body;
 
     const samePrice = price === undefined || price === ticket.price;

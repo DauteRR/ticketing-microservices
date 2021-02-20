@@ -1,5 +1,7 @@
+import { mongo } from 'mongoose';
 import request from 'supertest';
 import { app } from '../../app';
+import { Ticket } from '../../models/ticket.model';
 import { natsWrapper } from '../../nats-wrapper';
 import { createTicket } from './create-ticket.route.test';
 import { getTicket } from './get-ticket.route.test';
@@ -136,5 +138,25 @@ describe('Ticket update: PUT /api/tickets/:id', () => {
       .expect(200);
 
     expect(natsWrapper.client.publish).toHaveBeenCalled();
+  });
+
+  it('rejects updates if the ticket is reserved', async () => {
+    let title = 'title';
+    let price = 20;
+    const {
+      body: { id }
+    } = await createTicket(title, price, 'test1@test.com').expect(201);
+    title = 'new title';
+    price = 1000;
+
+    const ticket = await Ticket.findById(id);
+    ticket!.set({ orderId: new mongo.ObjectId().toHexString() });
+    await ticket!.save();
+
+    await request(app)
+      .put(`${baseEndpoint}/${id}`)
+      .set('Cookie', global.getAuthCookie('test1@test.com'))
+      .send({ title, price })
+      .expect(400);
   });
 });

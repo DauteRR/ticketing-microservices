@@ -7,6 +7,7 @@ interface TicketAttrs extends CreateTicketDto {
 
 export interface TicketDocument extends Document, TicketAttrs {
   version: number;
+  orderId?: string;
 }
 
 interface TicketModel extends Model<TicketDocument> {
@@ -26,6 +27,9 @@ const ticketSchema = new Schema<TicketDocument, TicketModel>(
     userId: {
       type: String,
       required: true
+    },
+    orderId: {
+      type: String
     }
   },
   {

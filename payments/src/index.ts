@@ -5,6 +5,9 @@ import { OrderCreatedListener } from './listener/order-created.listener';
 import { natsWrapper } from './nats-wrapper';
 
 const start = async () => {
+  if (!process.env.STRIPE_KEY) {
+    throw new Error('STRIPE_KEY environment variable must be defined');
+  }
   if (!process.env.JWT_KEY) {
     throw new Error('JWT_KEY environment variable must be defined');
   }

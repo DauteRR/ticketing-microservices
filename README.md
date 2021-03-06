@@ -24,26 +24,32 @@ $ minikube start --driver=virtualbox
 $ kubectl create secret generic jwt-secret --from-literal=JWT_KEY=jwt_secret
 ```
 
-3. Enable minikube ingress addon:
+3. Run the command below to create stripe secret (replace stripe_key with a valid [Stripe api key](https://stripe.com/))
+
+```bash
+$ kubectl create secret generic stripe-secret --from-literal=STRIPE_KEY=stripe_key
+```
+
+4. Enable minikube ingress addon:
 
 ```bash
 $ minikube addons enable ingress
 ```
 
-4. Create a LoadBalancer service that will expose the ingress-nginx-controller deployment:
+5. Create a LoadBalancer service that will expose the ingress-nginx-controller deployment:
 
 ```bash
 $ kubectl expose deployment ingress-nginx-controller --target-port=80 --type=LoadBalancer -n kube-system
 ```
 
-5. Add a temporary line to /etc/hosts file (replace ip_address with the result of running minikube ip):
+6. Add a temporary line to /etc/hosts file (replace ip_address with the result of running minikube ip):
 
 > ip_address ticketing.dev
 
-6. Run Skaffold to create Kubernetes Objects (in order to stop Skaffold, press ctrl + c):
+7. Run Skaffold to create Kubernetes Objects (in order to stop Skaffold, press ctrl + c):
 
 ```bash
 $ skaffold dev
 ```
 
-7. Navigate to https://ticketing.dev
+8. Navigate to https://ticketing.dev

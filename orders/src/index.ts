@@ -7,6 +7,7 @@ import { TicketUpdatedListener } from './listener/ticket-updated.listener';
 import { natsWrapper } from './nats-wrapper';
 
 const start = async () => {
+  console.log('Starting...');
   if (!process.env.JWT_KEY) {
     throw new Error('JWT_KEY environment variable must be defined');
   }

@@ -18,7 +18,7 @@ const paymentSchema = new Schema<PaymentDocument, PaymentModel>(
       required: true
     },
     chargeId: {
-      type: Number,
+      type: String,
       required: true
     }
   },

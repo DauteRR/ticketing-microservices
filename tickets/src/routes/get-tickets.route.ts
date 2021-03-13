@@ -7,7 +7,9 @@ export const getTicketsRouter = express.Router();
 getTicketsRouter.get(
   '/api/tickets',
   async (req: Request, res: Response<GetTicketsResponse>) => {
-    const tickets = await Ticket.find();
+    const tickets = await Ticket.find({
+      orderId: undefined
+    });
     res.send(tickets);
   }
 );

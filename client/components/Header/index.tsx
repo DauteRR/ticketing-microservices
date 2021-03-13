@@ -28,6 +28,20 @@ export const Header: React.FC<Props> = ({ currentUser }) => {
           )}
           {currentUser && (
             <li className="nav-item">
+              <Link href="/tickets/new">
+                <a className="nav-link">Sell Tickets</a>
+              </Link>
+            </li>
+          )}
+          {currentUser && (
+            <li className="nav-item">
+              <Link href="/orders">
+                <a className="nav-link">My Orders</a>
+              </Link>
+            </li>
+          )}
+          {currentUser && (
+            <li className="nav-item">
               <Link href="/auth/signout">
                 <a className="nav-link">Sign Out</a>
               </Link>

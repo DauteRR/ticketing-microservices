@@ -6,7 +6,7 @@ import { ErrorsAlert } from '../components/ErrorsAlert';
 interface UseRequestParams<Body, Response> {
   url: string;
   method: 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS' | 'PATCH';
-  body: Body;
+  body: Partial<Body>;
   onSuccess(data: Response): any;
 }
 
@@ -18,13 +18,13 @@ export function useRequest<Body = any, Response = any>({
 }: UseRequestParams<Body, Response>) {
   const [errors, setErrors] = useState<JSX.Element>(<></>);
 
-  const doRequest = async () => {
+  const doRequest = async (props: Partial<Body> = {}) => {
     try {
       setErrors(<></>);
       const response = await axios.request({
         url,
         method,
-        data: body
+        data: { ...body, ...props }
       });
 
       if (onSuccess) onSuccess(response.data);

@@ -24,10 +24,11 @@ $ minikube start --driver=virtualbox
 $ kubectl create secret generic jwt-secret --from-literal=JWT_KEY=jwt_secret
 ```
 
-3. Run the command below to create stripe secret (replace stripe_key with a valid [Stripe api key](https://stripe.com/))
+3. Run the commands below to create stripe secret and public key (replace stripe_key with a valid [Stripe api key](https://stripe.com/) and stripe_public_key with it's corresponding public api key)
 
 ```bash
 $ kubectl create secret generic stripe-secret --from-literal=STRIPE_KEY=stripe_key
+$ kubectl create secret generic stripe-public-key --from-literal=STRIPE_PUBLIC_KEY=stripe_public_key
 ```
 
 4. Enable minikube ingress addon:
@@ -52,4 +53,4 @@ $ kubectl expose deployment ingress-nginx-controller --target-port=80 --type=Loa
 $ skaffold dev
 ```
 
-8. Navigate to https://ticketing.dev
+8. Navigate to https://ticketing.dev, click on the page background and type: thisisunsafe

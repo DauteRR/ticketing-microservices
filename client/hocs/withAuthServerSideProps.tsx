@@ -15,19 +15,15 @@ export function withAuthServerSideProps<Q>(
     const {
       data: { currentUser }
     } = response;
-    let result = { currentUser };
+    const props = { currentUser };
 
     if (!getServerSidePropsFunc) {
-      return { props: result };
+      return { props };
     }
 
-    const { props } = await getServerSidePropsFunc(context);
-    if (props) {
-      result = { ...result, ...props };
+    const result = (await getServerSidePropsFunc(context)) as { props: Q };
+    if (result && result.props) {
+      return { props: { ...props, ...result.props } };
     }
-
-    return {
-      props: result
-    };
   };
 }
